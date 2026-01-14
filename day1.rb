@@ -1,0 +1,108 @@
+# normal func
+# def greet
+#     puts "Hello"
+# end
+# greet()
+
+# variables
+
+# 1. local var
+# def greet
+#     name = "ayush"
+#     puts name
+# end
+# greet()
+# puts name
+
+# 2. instance var
+# class User
+#     def initialize(name)
+#         @name = name
+#     end
+#     def greet 
+#         "Hello #{@name}"
+#     end
+# end
+# obj = User.new("Arya")
+# puts obj.greet()
+
+# 3. Class var
+# class User
+#     @@count = 0
+
+#     def initialize
+#         @@count += 1
+#     end
+#     def self.count
+#         @@count
+#     end
+# end
+
+# 4. class instance var
+# class User
+#     @count = 0
+#     def self.increment
+#         @count += 1
+#     end
+#     def self.count
+#         @count
+#     end
+# end
+# obj = User.new
+
+# 5. global var
+# $global_count
+
+# 6. constant
+# COUNT = 0
+# class App
+#     VERSION = "2.0"
+# end
+
+# | Variable       | Prefix            | Scope              |
+# | -------------- | ----------------- | ------------------ |
+# | Local          | none              | Block / method     |
+# | Instance       | `@`               | Object             |
+# | Class variable | `@@`              | Class + subclasses |
+# | Class instance | `@` (class level) | Class only         |
+# | Global         | `$`               | Everywhere         |
+# | Constant       | Uppercase         | Lexical scope      |
+
+# Visual Memory Trick
+# name      → local
+# @name     → object
+# @@name    → shared across classes
+# $class    → global
+# NAME      → constant
+
+# | Syntax       | Valid | Usage                      |
+# | ------------ | ----- | -------------------------- |
+# | `.new`       | ✅     | No arguments               |
+# | `.new()`     | ✅     | Explicit, avoids ambiguity |
+# | `.new args`  | ✅     | Less readable              |
+# | `.new(args)` | ✅     | Best practice              |
+
+# class User
+#   attr_accessor :name, :age
+
+#   def initialize(name, age)
+#     @name = name
+#     @age = age
+#   end
+
+#   def greet
+#     "Hi, I am #{@name}"
+#   end
+
+#   def self.info
+#     "User model"
+#   end
+# end
+
+# user = User.new("Ayush", 25)
+# puts user.greet
+# puts User.info
+
+
+# about class and objects - basic
+# getter setter 
