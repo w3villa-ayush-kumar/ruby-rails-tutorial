@@ -1,0 +1,8 @@
+#database - relational db
+# normalisation
+# 1nf - problem and solution with eg
+# 2nf and 3nf
+# denorm
+# joins
+#self joins
+# db relationship
