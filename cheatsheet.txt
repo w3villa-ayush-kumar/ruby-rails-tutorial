@@ -1,26 +1,22 @@
-w3villa@w3villa-ThinkPad-T480:~/Workspace/kivo-master$ lsof -i :3000
+lsof -i :3000
 
-# lsof → stands for List Open Files.  
-# -i :3000 → filters results to show processes using network port 3000.
-
-COMMAND   PID    USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
-ruby    49803 w3villa   13u  IPv4 264049      0t0  TCP localhost:3000 (LISTEN)
-ruby    49803 w3villa   14u  IPv6 264050      0t0  TCP ip6-localhost:3000 (LISTEN)
-
-w3villa@w3villa-ThinkPad-T480:~/Workspace/kivo-master$ kill -9 49803
-
-# kill → sends a signal to a process.
-
-# -9 → sends SIGKILL, which means: Stop RIGHT NOW — no cleanup, no saving, no graceful shutdown (-9 is usually last resort)
-
-# kill 49803 :-
-
-This sends SIGTERM (15):
-
-✔ Allows the app to close files
-✔ Finish requests
-✔ Release resources
-
-# Use -9 only when: Process is frozen, Ignoring normal kill, Zombie process
+kill -9 49803
 
 one liner - kill -9 $(lsof -t -i:3000)
+
+bundle exec rails s
+
+bundle exec rails c
+
+bundle exec db:create
+
+bundle exec db:migrate
+
+bundle exec db:migrate:status
+
+bundle exec db:drop
+
+mysql -u root -p simmpli_development1 < ~/Workspace/db-dump/28_May_025_backup.sql
+
+bundle install
+
