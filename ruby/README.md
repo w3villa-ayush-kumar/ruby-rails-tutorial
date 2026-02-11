@@ -1122,9 +1122,125 @@ arr.sort!
 - Understand destructive vs non-destructive operations for safer code.
 - Frequently used in real-world Ruby and Rails applications.
 
-# Hash Methods in Ruby
+---
 
-Ruby provides many built-in methods to efficiently work with **hashes** — similar to arrays. These methods help check data, compare hashes, retrieve values, and clean up unwanted entries.
+# Ruby Hashes
+
+## What is a Hash?
+
+A **Hash** is a data structure that stores data in **key → value pairs**.
+
+```ruby
+person = {
+  "first_name" => "Ravi",
+  "last_name" => "Singh",
+  "email" => "ravi@example.com"
+}
+```
+
+### Key Characteristics
+
+- Stores multiple values under unique keys.
+- Keys act as identifiers to retrieve values.
+- More controlled than arrays because access is not index-based.
+
+---
+
+## Hash vs Array
+
+| Feature   | Array          | Hash          |
+| --------- | -------------- | ------------- |
+| Access    | Index (0,1,2…) | Key           |
+| Structure | Ordered        | Key-based     |
+| Control   | Less           | More flexible |
+
+---
+
+## Creating Hashes
+
+### Empty Hash
+
+```ruby
+hash = {}
+```
+
+### With Values
+
+```ruby
+person = {
+  name: "Ravi",
+  email: "ravi@gmail.com",
+  contact: "9999999999"
+}
+```
+
+---
+
+## Accessing Values
+
+```ruby
+person[:name]
+```
+
+✔ Returns the value associated with the key.
+
+⚠️ Use the correct key type:
+
+- Symbol ≠ String
+
+```ruby
+person[:name]    # correct
+person["name"]  # may return nil
+```
+
+---
+
+## Inserting & Updating Values
+
+### Add New Pair
+
+```ruby
+person[:age] = 25
+```
+
+### Update Existing Key
+
+```ruby
+person[:name] = "Ravi Kumar"
+```
+
+✔ Latest value overrides the old one.
+
+---
+
+## Duplicate Keys
+
+Hashes **cannot store duplicate keys**.
+
+```ruby
+{ name: "Ravi", name: "Kumar" }
+```
+
+✔ Final Output:
+
+```ruby
+{ name: "Kumar" }
+```
+
+---
+
+## Symbols vs Strings (Keys)
+
+### Symbols Preferred Because:
+
+- Better memory optimization
+- Faster comparisons
+- Immutable
+
+```ruby
+{name: "Ravi"}   # Recommended
+{"name" => "Ravi"}
+```
 
 ---
 
@@ -1140,160 +1256,815 @@ Ruby provides many built-in methods to efficiently work with **hashes** — simi
 
 ---
 
-## Checking Available Methods
+## Advantages of Hashes
 
-You can view all methods supported by a hash:
+- Flexible data access
+- Better real-world modeling (user data, configs, metadata)
+- No need to remember numeric positions
+- Efficient lookup
+
+---
+
+# Important Hash Methods
+
+Ruby provides many built-in methods to operate on hashes.
+
+View all methods:
 
 ```ruby
-h = {}
-h.methods
+hash.methods
 ```
 
 ---
 
-## `empty?`
+## 1. `empty?`
 
-Checks whether a hash contains any key-value pairs.
+Checks whether a hash has any key-value pairs.
 
 ```ruby
-h = {}
-h.empty?   # => true
-
-h[:a] = 1
-h.empty?   # => false
+hash.empty?
 ```
 
-✅ Returns a boolean (`true` / `false`)
-✅ Requires no arguments
+✔ Returns:
+
+- `true` → if empty
+- `false` → otherwise
 
 ---
 
-## `eql?`
+## 2. `eql?`
 
-Compares two hashes for **content equality**.
-
-```ruby
-h1 = {a: 1, b: 2}
-h2 = {a: 1, b: 2}
-
-h1.eql?(h2)   # => true
-```
-
-### Important Rules:
-
-- Keys must match
-- Values must match
-- Order does **NOT** matter
+Checks if two hashes are **identical in content**.
 
 ```ruby
-{a: 1, b: 2}.eql?({b: 2, a: 1})
-# => true
+h1.eql?(h2)
 ```
+
+✔ Order of keys does NOT matter.
+
+❗ Returns false if:
+
+- Values differ
+- Keys differ
 
 ---
 
-## `equal?`
+## 3. `equal?`
 
-Checks whether two variables reference the **same hash object in memory**.
+Checks if two variables reference the **same hash object in memory**.
 
 ```ruby
-h1 = {a: 1}
-h2 = {a: 1}
-
-h1.equal?(h2)   # => false
+h1.equal?(h2)
 ```
 
-Because they are different objects.
+👉 Difference from `eql?`:
+
+- `eql?` → compares data
+- `equal?` → compares memory reference
 
 ```ruby
-h3 = h1
-h1.equal?(h3)   # => true
-```
-
-### Difference: `eql?` vs `equal?`
-
-| Method   | Checks           | Result                   |
-| -------- | ---------------- | ------------------------ |
-| `eql?`   | Content          | True if identical data   |
-| `equal?` | Memory reference | True only if same object |
-
----
-
-## `key?`
-
-Checks if a specific key exists.
-
-```ruby
-h = {name: "Ruby"}
-
-h.key?(:name)   # => true
-h.key?("name") # => false (symbol ≠ string)
-```
-
-⚠️ Always pass the correct key type.
-
----
-
-## `fetch`
-
-Retrieves a value using a key.
-
-```ruby
-h = {language: "Ruby"}
-h.fetch(:language)  # => "Ruby"
-```
-
-If the key does not exist:
-
-```ruby
-h.fetch(:version)
-# => KeyError
-```
-
-✅ Safer than direct access when you want errors for missing keys.
-
----
-
-## `compact`
-
-Removes key-value pairs where the value is `nil`.
-
-```ruby
-h = {a: 1, b: nil}
-
-h.compact
-# => {a: 1}
-```
-
-### Destructive vs Non-Destructive
-
-```ruby
-h.compact   # Non-destructive (original unchanged)
-h.compact!  # Destructive (modifies original)
+h2 = h1
+h1.equal?(h2)   # true
 ```
 
 ---
 
-## Do Key Orders Matter?
+## 4. `key?`
 
-No. Hash comparisons focus on keys and values — not order.
+Checks whether a key exists.
+
+```ruby
+hash.key?(:name)
+```
+
+✔ Returns boolean.
 
 ---
 
-## Ways to Get Values from a Hash
+## 5. `fetch`
 
-- Using `fetch`
-- Using bracket syntax (`h[:key]`)
+Retrieves value using a key.
+
+```ruby
+hash.fetch(:name)
+```
+
+✔ Returns value if key exists.
+
+❗ Raises **KeyError** if key is missing.
+
+---
+
+## 6. `compact`
+
+Removes keys that have `nil` values.
+
+### Non‑Destructive
+
+```ruby
+hash.compact
+```
+
+Does NOT modify original hash.
+
+### Destructive
+
+```ruby
+hash.compact!
+```
+
+Permanently removes nil pairs.
+
+---
+
+## Sorting Hashes
+
+Calling `sort` typically sorts based on **keys**, not values.
+
+---
+
+## Key Ordering in Comparison
+
+When comparing hashes:
+
+✔ Order **does not matter**.
+
+Only checks:
+
+- Keys
+- Values
+
+---
+
+# Quick Interview Notes ⭐
+
+### Difference — `eql?` vs `equal?`
+
+| eql?            | equal?                  |
+| --------------- | ----------------------- |
+| Checks content  | Checks memory reference |
+| Data comparison | Object identity         |
+
+---
+
+### Ways to Get Value From Hash
+
+- `hash[:key]`
+- `hash.fetch(:key)`
+
+---
+
+### How to Check Key Exists?
+
+```ruby
+hash.key?(:key)
+```
+
+---
+
+# Beginner Mistakes to Avoid
+
+- Mixing string and symbol keys.
+- Assuming duplicate keys are allowed.
+- Forgetting `fetch` throws an error.
+- Confusing `eql?` with `equal?`.
+
+---
+
+# Summary
+
+- Hash = key-value data structure.
+- Provides flexible and efficient data access.
+- Symbols are preferred as keys.
+- Built-in methods simplify operations.
+- `eql?` compares data, `equal?` compares objects.
+
+# Loops in Ruby
+
+Loops are a fundamental programming concept used to **repeat a block of code multiple times** based on a condition.
+
+They help automate repetitive tasks and make programs cleaner and more efficient.
+
+---
+
+## What is a Loop?
+
+A loop executes a set of instructions until a specific condition is met.
+
+### Example Use Cases:
+
+- Sending greetings to multiple users
+- Printing messages several times
+- Processing collections like arrays or hashes
+- Automating repetitive operations
+
+---
+
+## Why Use Loops?
+
+Without loops, you would need to write the same code again and again.
+
+Instead of this:
+
+```ruby
+puts "Hello"
+puts "Hello"
+puts "Hello"
+```
+
+Use a loop:
+
+```ruby
+3.times do
+  puts "Hello"
+end
+```
+
+✅ Cleaner code
+✅ Less repetition
+✅ Easier maintenance
+
+---
+
+## Common Loop in Ruby
+
+### `times` Loop
+
+Executes a block a fixed number of times.
+
+```ruby
+5.times do
+  puts "Hello"
+end
+```
+
+👉 Runs exactly **5 times**.
+
+---
+
+## Loop with Counter
+
+Ruby automatically tracks the iteration index.
+
+```ruby
+5.times do |i|
+  puts "Iteration #{i}"
+end
+```
+
+Output starts from **0**.
+
+---
+
+## Advantages of Loops
+
+- Reduce code duplication
+- Improve readability
+- Save development time
+- Useful for working with collections
+- Core concept across almost all programming languages
+
+---
+
+## Things to Remember
+
+- Loops operate on collections or run until conditions are satisfied.
+- Avoid writing repetitive code manually.
+- Choose loops when a task must run multiple times.
 
 ---
 
 ## Key Takeaways
 
-- Ruby hashes include powerful built-in methods.
-- Use `empty?` to check data presence.
-- `eql?` compares content; `equal?` compares memory.
-- `key?` verifies existence of a key.
-- `fetch` is ideal when missing keys should raise errors.
-- `compact` helps clean hashes by removing `nil` values.
+- Loops repeat code automatically.
+- They are heavily used in real-world programs.
+- Help manage large datasets efficiently.
+- Essential concept for mastering Ruby and other programming languages.
 
-Mastering these methods makes working with Ruby hashes much faster and safer.
+# For Loop in Ruby
+
+The **for loop** in Ruby is used to iterate over a collection of elements such as ranges, arrays, or other enumerable objects. It allows you to execute a block of code for each element in the collection.
+
+---
+
+## What is a For Loop?
+
+A `for` loop runs code repeatedly by traversing through a defined collection.
+
+### Basic Syntax
+
+```ruby
+for variable in collection
+  # code to execute
+end
+```
+
+- `variable` → Holds the current element during each iteration.
+- `collection` → Can be a range, array, or similar structure.
+
+---
+
+## Example
+
+```ruby
+for i in 1..5
+  puts i
+end
+```
+
+**Output:**
+
+```
+1
+2
+3
+4
+5
+```
+
+The loop starts at `1` and ends at `5`.
+
+---
+
+## Range Operators in Ruby
+
+When using ranges inside a `for` loop, it is important to understand the difference between **two dots** and **three dots**.
+
+### Inclusive Range (`..`)
+
+Includes both the start and end values.
+
+```ruby
+for i in 1..5
+  puts i
+end
+```
+
+Runs from **1 to 5**.
+
+---
+
+### Exclusive Range (`...`)
+
+Excludes the last value.
+
+```ruby
+for i in 1...5
+  puts i
+end
+```
+
+Runs from **1 to 4**.
+
+---
+
+## Key Characteristics
+
+- Iterates over a fixed collection.
+- Automatically stops when the collection ends.
+- Cannot run infinitely when used with ranges.
+- Useful when the number of elements is known.
+
+---
+
+## Example: Iterating Over a Collection
+
+```ruby
+numbers = [10, 20, 30]
+
+for num in numbers
+  puts num
+end
+```
+
+---
+
+## Advantages
+
+- Simple and easy to read.
+- Ideal for traversing collections.
+- Helps perform operations on multiple elements efficiently.
+- Reduces repetitive code.
+
+---
+
+## Things to Remember
+
+- Always define a valid collection.
+- Understand the difference between `..` and `...`.
+- The loop ends automatically after the last element.
+- Best suited for straightforward iteration tasks.
+
+---
+
+## Key Takeaways
+
+- `for` loops iterate over collections.
+- Ranges control how many times the loop runs.
+- `..` includes the last value, `...` excludes it.
+- Commonly used for solving repetitive and collection-based problems.
+
+---
+
+# While Loop in Ruby
+
+## What is a While Loop?
+
+A **while loop** repeatedly executes a block of code **as long as a condition evaluates to `true`**.
+
+- The condition must return a boolean (`true` or `false`).
+- Once the condition becomes `false`, the loop stops.
+- Execution continues with the code written after the loop.
+
+---
+
+## Basic Syntax
+
+```ruby
+i = 1
+
+while i != 10
+  puts "Hello Ruby Developers"
+  i += 1
+end
+```
+
+### Flow:
+
+1. Initialize a loop variable.
+2. Check the condition.
+3. Execute the loop body.
+4. Update the variable.
+5. Repeat until the condition becomes false.
+
+---
+
+## Key Requirements
+
+### 1. Initialize a Variable
+
+The loop needs a variable that participates in the condition.
+
+```ruby
+i = 1
+```
+
+### 2. Provide a Condition
+
+The condition determines whether the loop runs.
+
+```ruby
+while i != 10
+```
+
+### 3. Update the Variable
+
+Without updating, the loop may never end.
+
+```ruby
+i += 1
+```
+
+---
+
+## Infinite Loop Risk
+
+Unlike `for` loops, **while loops can easily become infinite** if written incorrectly.
+
+### Case 1 — No Increment (Infinite Execution)
+
+```ruby
+i = 1
+
+while i != 10
+  puts "Hello"
+end
+```
+
+**Problem:** `i` never changes → condition always true.
+
+---
+
+### Case 2 — Wrong Increment
+
+```ruby
+i = 1
+
+while i != 10
+  puts "Hello"
+  i += 5
+end
+```
+
+Sequence: `1 → 6 → 11 → 16...`
+
+`i` never becomes `10`, so the loop never stops.
+
+---
+
+### Case 3 — Condition Always False
+
+```ruby
+i = 1
+
+while i > 10
+  puts "Hello"
+end
+```
+
+The loop **never executes**, making it useless.
+
+---
+
+## While vs For Loop
+
+| While Loop              | For Loop                        |
+| ----------------------- | ------------------------------- |
+| Condition-based         | Range/collection-based          |
+| Can become infinite     | Always finite                   |
+| Requires manual updates | Iteration handled automatically |
+| More flexible           | Safer for fixed iterations      |
+
+---
+
+## Scope Behavior
+
+**While loops do NOT create their own scope.**
+
+Variables declared inside the loop are accessible outside it.
+
+---
+
+## Best Practices
+
+- Always modify the loop variable.
+- Ensure the condition eventually becomes false.
+- Avoid conditions that are permanently true or false.
+- Use `for` when iterations are fixed.
+- Use `while` when the number of iterations is unknown.
+
+---
+
+## Things to Remember
+
+- While loops depend entirely on the condition.
+- Incorrect logic can cause infinite execution.
+- A permanently false condition prevents execution.
+- While loops share the same scope as surrounding code.
+
+---
+
+# Until Loop in Ruby
+
+## What is an Until Loop?
+
+An **until loop** is the opposite of a `while` loop.
+
+- `while` runs **when the condition is true**.
+- `until` runs **when the condition is false**.
+- The loop stops once the condition becomes true.
+
+---
+
+## Basic Syntax
+
+```ruby
+i = 1
+
+until i == 10
+  puts "Hello Ruby Developers"
+  i += 1
+end
+```
+
+### Flow:
+
+1. Initialize a variable.
+2. Check the condition.
+3. Execute the loop **while the condition is false**.
+4. Update the variable.
+5. Stop when the condition becomes true.
+
+---
+
+## While vs Until
+
+| While                              | Until                             |
+| ---------------------------------- | --------------------------------- |
+| Runs when condition is **true**    | Runs when condition is **false**  |
+| Stops when condition becomes false | Stops when condition becomes true |
+| Easier for positive conditions     | Useful for negative conditions    |
+
+---
+
+## Infinite Loop Risk
+
+Just like `while`, an `until` loop can also become infinite.
+
+### Example — Wrong Update
+
+```ruby
+i = 1
+
+until i > 10
+  puts "Hello"
+  i -= 1
+end
+```
+
+**What happens?**
+
+- `1 > 10` → false → loop runs
+- `0 > 10` → false
+- `-1 > 10` → false
+
+The condition never becomes true, so the loop runs forever.
+
+---
+
+## Key Takeaways
+
+- `until` is simply the logical opposite of `while`.
+- Always update the loop variable correctly.
+- Ensure the condition eventually becomes true.
+- Poor logic can cause infinite execution.
+
+---
+
+# Ruby Loops — Quick Comparison
+
+| Feature              | For                | While              | Until               |
+| -------------------- | ------------------ | ------------------ | ------------------- |
+| Based On             | Collection / Range | Condition          | Condition           |
+| Infinite Risk        | Very Low           | High               | High                |
+| Manual Update Needed | No                 | Yes                | Yes                 |
+| Best Use Case        | Known iterations   | Unknown iterations | Negative conditions |
+
+---
+
+## When to Use Which?
+
+**Use `for` when:**
+
+- Iteration count is fixed
+- Looping over arrays, ranges, or collections
+
+**Use `while` when:**
+
+- You want execution while a condition remains true
+- Iterations are unpredictable
+
+**Use `until` when:**
+
+- You want execution until something becomes true
+- The condition is easier to express negatively
+
+---
+
+## Common Loop Mistakes
+
+- Forgetting to update the loop variable
+- Writing conditions that never change
+- Creating permanently true/false expressions
+- Using `while`/`until` when a `for` loop is safer
+
+---
+
+# Map and Collect in Ruby
+
+## What is `map`?
+
+`map` is an iterator used to transform each element of a collection such as an array, hash, or any enumerable object.
+
+- Executes a block for every element.
+- Returns a **new collection** with transformed values.
+- Does **not modify** the original collection.
+
+### Example
+
+```ruby
+numbers = [1, 2, 3, 4]
+result = numbers.map { |n| n * 2 }
+
+puts result.inspect   # [2, 4, 6, 8]
+puts numbers.inspect  # [1, 2, 3, 4]
+```
+
+**Observation:** The original array remains unchanged.
+
+---
+
+## Destructive Version — `map!`
+
+`map!` performs the same transformation but **modifies the original collection**.
+
+### Example
+
+```ruby
+numbers = [1, 2, 3]
+numbers.map! { |n| n * 2 }
+
+puts numbers.inspect  # [2, 4, 6]
+```
+
+### When to Use
+
+Use destructive methods only when you intentionally want to mutate the data and no longer need the original values.
+
+---
+
+## What is `collect`?
+
+`collect` is an alias of `map`. Both methods behave identically.
+
+```ruby
+numbers = [1, 2, 3]
+numbers.collect { |n| n + 1 }
+# => [2, 3, 4]
+```
+
+### Is There Any Difference?
+
+No functional difference exists between `map` and `collect`.
+
+- `map` → Preferred in modern Ruby codebases.
+- `collect` → Older naming, still fully supported.
+
+Most developers choose **map** because it clearly communicates data transformation.
+
+---
+
+## Key Characteristics of `map`
+
+- Works on collections (arrays, hashes, enumerables).
+- Always returns a new object unless `map!` is used.
+- Ideal for transforming data.
+- Maintains predictable behavior.
+
+---
+
+## Common Use Cases
+
+Use `map` when you need to:
+
+- Convert values (e.g., currency calculations).
+- Format strings.
+- Extract attributes from objects.
+- Perform mathematical operations.
+- Prepare data for APIs or UI layers.
+
+---
+
+## Common Mistake
+
+Accidentally using `map!` can overwrite important data.
+
+```ruby
+users.map! { |u| u.name }
+```
+
+After execution, the original user objects are replaced with names.
+
+Always choose between **non-destructive (`map`)** and **destructive (`map!`)** deliberately.
+
+---
+
+## Quick Comparison
+
+| Method  | Modifies Original? | Returns New Collection? |
+| ------- | ------------------ | ----------------------- |
+| map     | No                 | Yes                     |
+| map!    | Yes                | No                      |
+| collect | No                 | Yes                     |
+
+---
+
+## map vs each
+
+| Feature      | map                 | each                             |
+| ------------ | ------------------- | -------------------------------- |
+| Purpose      | Transform data      | Iterate over data                |
+| Return Value | New collection      | Original collection              |
+| Best For     | Data transformation | Side effects (printing, logging) |
+
+### Example
+
+```ruby
+numbers = [1, 2, 3]
+
+numbers.each { |n| n * 2 }
+# => [1, 2, 3]  (no transformation)
+
+numbers.map { |n| n * 2 }
+# => [2, 4, 6]
+```
+
+---
+
+## Important Takeaways
+
+- `map` is used for transforming collections.
+- `map!` mutates the original data.
+- `collect` is simply another name for `map`.
+- Prefer non-destructive methods unless modification is required.
+- Choose `map` over `each` when you expect a transformed result.
