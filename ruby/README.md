@@ -2068,3 +2068,249 @@ numbers.map { |n| n * 2 }
 - `collect` is simply another name for `map`.
 - Prefer non-destructive methods unless modification is required.
 - Choose `map` over `each` when you expect a transformed result.
+
+# Conditional Flow in Ruby
+
+## Introduction
+
+Conditional flow allows a Ruby program to make decisions based on given conditions. Using conditional statements, code execution can change depending on whether a condition evaluates to true or false.
+
+These structures are essential for handling user input, validations, comparisons, and real-world decision-making scenarios.
+
+## Core Concept
+
+A conditional statement evaluates a boolean expression.
+
+* If the condition is true → a specific block of code executes.
+* If the condition is false → it may execute an alternative block (if defined).
+
+Ruby provides the following conditional constructs:
+
+* `if`
+* `if...else`
+* `if...elsif...else`
+* `unless`
+
+Execution Flow:
+
+1. Ruby evaluates the `if` condition.
+2. If true, it executes the corresponding block.
+3. If false, it checks the next `elsif` (if present).
+4. If no condition matches, the `else` block executes (if defined).
+
+Only `false` and `nil` are treated as falsey in Ruby. Everything else is truthy.
+
+## Syntax
+
+```ruby
+# Basic if
+if condition
+  # code executes if condition is true
+end
+
+# if-else
+if condition
+  # code if true
+else
+  # code if false
+end
+
+# if-elsif-else
+if condition1
+  # code
+elsif condition2
+  # code
+else
+  # default case
+end
+
+# unless (negative condition)
+unless condition
+  # executes if condition is false
+end
+```
+
+## Example
+
+### Equality Check
+
+```ruby
+puts "Enter a number:"
+a = gets.to_i
+
+if a == 3
+  puts "Number is correct"
+end
+```
+
+If the number is not 3, nothing is printed because there is no `else` block.
+
+### Even or Odd Check
+
+```ruby
+puts "Enter a number:"
+n = gets.to_i
+
+if n % 2 == 0
+  puts "Number is even"
+else
+  puts "Number is odd"
+end
+```
+
+Here:
+
+* If the remainder is 0 → the number is even.
+* Otherwise → the number is odd.
+
+### Multiple Conditions with Elsif
+
+```ruby
+a = 10
+b = 20
+c = 30
+
+if a > 40
+  puts "a is greater than 40"
+elsif b > 40
+  puts "b is greater than 40"
+elsif c > 40
+  puts "c is greater than 40"
+else
+  puts "None of them is greater than 40"
+end
+```
+
+`elsif` is useful when chaining multiple related conditions.
+
+## Important Points
+
+* `if` executes only when the condition is true.
+* `else` executes only when the `if` (and all `elsif`) conditions fail.
+* `elsif` allows checking multiple conditions in sequence.
+* If a condition is always true, its block always executes.
+* If a condition is always false, its block never executes.
+* Poorly written conditions may result in unreachable or useless code.
+* Use proper indentation for readability.
+
+## Comparison
+
+| Structure         | Purpose                             | When to Use                |
+| ----------------- | ----------------------------------- | -------------------------- |
+| if                | Execute code when condition is true | Single check               |
+| if...else         | Two possible outcomes               | Even/Odd, Yes/No decisions |
+| if...elsif...else | Multiple sequential conditions      | Grading, range checks      |
+| unless            | Execute when condition is false     | Negative checks            |
+
+Conditional statements form the foundation of decision-making logic in Ruby programs.
+
+# Case Statement in Ruby
+
+## Introduction
+
+The `case` statement in Ruby is a conditional control structure used as an alternative to multiple `if...elsif...else` statements. It is similar to the `switch` statement found in languages like C and C++.
+
+It allows comparison of a single target expression against multiple conditions in a clean and readable format.
+
+## Core Concept
+
+The `case` statement evaluates a target expression and compares it against multiple `when` conditions.
+
+* `case` holds the target expression.
+* `when` contains comparison expressions.
+* If a match is found, the corresponding block executes.
+* If no match is found, the `else` block executes (if defined).
+
+By default, Ruby uses the triple-equals (`===`) operator to compare the `case` expression with each `when` condition.
+
+Execution Flow:
+
+1. Ruby evaluates the target expression.
+2. It compares it with each `when` condition using `===`.
+3. On first match, the corresponding block runs.
+4. If no condition matches, the `else` block executes.
+
+## Syntax
+
+```ruby
+case expression
+when condition1
+  # code
+when condition2
+  # code
+else
+  # default code
+end
+```
+
+Single-line form using `then`:
+
+```ruby
+case expression
+when condition1 then statement
+when condition2 then statement
+else statement
+end
+```
+
+## Example
+
+### Age Classification Using Ranges
+
+```ruby
+puts "Enter age:"
+age = gets.to_i
+
+case age
+when 1..12
+  puts "Person is kid"
+when 13..18
+  puts "Person is teenager"
+when 19..45
+  puts "Person is young"
+when 46..90
+  puts "Person is senior citizen"
+else
+  puts "I have no idea what to say about this"
+end
+```
+
+Explanation:
+
+* If age falls within `1..12` → Kid
+* `13..18` → Teenager
+* `19..45` → Young
+* `46..90` → Senior Citizen
+* Any other value → Executes `else`
+
+### Using `then` Keyword
+
+```ruby
+case age
+when 1..12 then puts "Person is kid"
+when 13..18 then puts "Person is teenager"
+when 19..45 then puts "Person is young"
+when 46..90 then puts "Person is senior citizen"
+else puts "I have no idea what to say about this"
+end
+```
+
+The `then` keyword is used when writing the result on the same line as the `when` condition.
+
+## Important Points
+
+* `case` compares one target expression against multiple conditions.
+* Matching is done using the `===` operator by default.
+* Ranges (`1..12`) work naturally with `case`.
+* The first matching `when` block executes.
+* `else` runs only if none of the `when` conditions match.
+* `then` is optional and used for single-line expressions.
+
+## Comparison
+
+| Structure         | Best Used For                            | Readability |
+| ----------------- | ---------------------------------------- | ----------- |
+| if...elsif...else | Complex or unrelated conditions          | Moderate    |
+| case...when       | Comparing one value against many options | High        |
+
+The `case` statement improves clarity when multiple conditions depend on a single expression.
